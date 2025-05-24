@@ -8,7 +8,7 @@ provider:
 
 functions:
   hello:
-    handler: handler.hello
+    handler: index.handler
     events:
       - http:
           path: hello

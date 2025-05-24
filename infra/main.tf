@@ -72,6 +72,26 @@ resource "aws_iam_role_policy" "lambda_cognito" {
   })
 }
 
+resource "aws_iam_role_policy" "lambda_logs" {
+  name = local.lambda_logs_policy_name
+  role = aws_iam_role.lambda_exec.name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = "arn:aws:logs:*:*:*"
+      }
+    ]
+  })
+}
+
 resource "aws_lambda_function" "auth_lambda" {
   filename         = "lambda.zip"
   function_name    = var.lambda_function_name

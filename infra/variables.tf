@@ -30,7 +30,7 @@ variable "lambda_function_name" {
 variable "lambda_function_handler" {
   type        = string
   description = "The handler of the lambda function"
-  default     = "handler.hello"
+  default     = "index.handler"
 }
 
 variable "lambda_function_runtime" {
