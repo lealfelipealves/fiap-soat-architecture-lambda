@@ -107,6 +107,14 @@ resource "aws_lambda_function" "auth_lambda" {
   }
 }
 
+resource "aws_lambda_permission" "allow_apigateway" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.auth_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.cpf_api.execution_arn}/*/*"
+}
+
 resource "aws_apigatewayv2_api" "cpf_api" {
   name          = local.gateway_name
   protocol_type = "HTTP"
