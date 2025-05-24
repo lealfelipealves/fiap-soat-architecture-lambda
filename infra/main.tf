@@ -36,3 +36,82 @@ resource "aws_cognito_user_pool_client" "cpf_client" {
 
   prevent_user_existence_errors = "ENABLED"
 }
+
+resource "aws_iam_role" "lambda_exec" {
+  name = var.lambda_exec_role_name
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = "sts:AssumeRole",
+      Effect = "Allow",
+      Principal = {
+        Service = "lambda.amazonaws.com"
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "lambda_cognito" {
+  role = aws_iam_role.lambda_exec.name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Action = [
+          "cognito-idp:ListUsers",
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:AdminDeleteUser",
+          "cognito-idp:AdminUpdateUserAttributes",
+          "cognito-idp:AdminInitiateAuth"
+        ],
+      Resource = aws_cognito_user_pool.cpf_pool.arn
+    }]
+  })
+}
+
+resource "aws_lambda_function" "auth_lambda" {
+  filename         = "lambda.zip"
+  function_name    = var.lambda_function_name
+  role             = aws_iam_role.lambda_exec.arn
+  handler          = var.lambda_function_handler
+  runtime          = var.lambda_function_runtime
+  source_code_hash = filebase64sha256("lambda.zip")
+
+  environment {
+    variables = {
+      COGNITO_POOL_ID = aws_cognito_user_pool.cpf_pool.id
+    }
+  }
+}
+
+resource "aws_apigatewayv2_api" "cpf_api" {
+  name          = var.gateway_name
+  protocol_type = "HTTP"
+}
+
+resource "aws_apigatewayv2_integration" "lambda_integration" {
+  api_id                  = aws_apigatewayv2_api.cpf_api.id
+  integration_type        = "AWS_PROXY"
+  integration_uri         = aws_lambda_function.auth_lambda.invoke_arn
+  integration_method      = "POST"
+  payload_format_version  = "2.0"
+}
+
+resource "aws_apigatewayv2_route" "cpf_route" {
+  api_id    = aws_apigatewayv2_api.cpf_api.id
+  route_key = "POST /auth"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+}
+
+resource "aws_apigatewayv2_stage" "default" {
+  api_id      = aws_apigatewayv2_api.cpf_api.id
+  name        = "$default"
+  auto_deploy = true
+}
+
+output "api_endpoint" {
+  value = aws_apigatewayv2_api.cpf_api.api_endpoint
+}
