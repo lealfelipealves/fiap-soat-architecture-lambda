@@ -1,0 +1,34 @@
+# Diretórios e arquivos do Terraform
+.terraform/
+.terraform.lock.hcl
+
+# Arquivos de estado - podem conter dados sensíveis!
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
+
+# Planos de execução
+*.tfplan
+
+# Logs de execução
+crash.log
+
+# Variáveis locais
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Arquivos de saída (ex: zips para Lambda)
+*.zip
+
+# IDEs
+.vscode/
+.idea/
+
+# macOS e sistema operacional
+.DS_Store
+Thumbs.db
