@@ -1,5 +1,5 @@
 resource "aws_cognito_user_pool" "cpf_pool" {
-  name = var.user_pool_name
+  name = local.user_pool_name
 
   lifecycle {
     ignore_changes = [
@@ -25,7 +25,7 @@ resource "aws_cognito_user_pool" "cpf_pool" {
 }
 
 resource "aws_cognito_user_pool_client" "cpf_client" {
-  name         = var.user_pool_client_name
+  name         = local.user_pool_client_name
   user_pool_id = aws_cognito_user_pool.cpf_pool.id
 
   generate_secret = false
@@ -38,7 +38,7 @@ resource "aws_cognito_user_pool_client" "cpf_client" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = var.lambda_exec_role_name
+  name = local.lambda_exec_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -88,7 +88,7 @@ resource "aws_lambda_function" "auth_lambda" {
 }
 
 resource "aws_apigatewayv2_api" "cpf_api" {
-  name          = var.gateway_name
+  name          = local.gateway_name
   protocol_type = "HTTP"
 }
 

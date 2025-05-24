@@ -1,19 +1,24 @@
+variable "prefix" {
+  description = "Prefixo usado para nomear recursos"
+  type        = string
+}
+
 variable "user_pool_name" {
   type        = string
   description = "O nome do pool de usuários"
-  default     = "${var.prefix}-user-pool"
+  default     = "default-user-pool"
 }
 
 variable "user_pool_client_name" {
   type        = string
   description = "The name of the user pool client"
-  default     = "${var.prefix}-app-client"
+  default     = "default-app-client"
 }
 
 variable "lambda_exec_role_name" {
   type        = string
   description = "The secret of the user pool client"
-  default     = "${var.prefix}-lambda-role"
+  default     = "default-lambda-role"
 }
 
 variable "lambda_function_name" {
@@ -37,5 +42,5 @@ variable "lambda_function_runtime" {
 variable "gateway_name" {
   type        = string
   description = "The name of the gateway"
-  default     = "${var.prefix}-gateway"
+  default     = "default-gateway"
 }
