@@ -5,6 +5,11 @@ terraform {
       version = ">= 5.98.0"
     }
   }
+  backend "s3" {
+    bucket = "fiap-soat-architecture-lambda-tf-state"
+    key    = "terraform.tfstate"
+    region = var.aws_region
+  }
 }
 
 provider "aws" {

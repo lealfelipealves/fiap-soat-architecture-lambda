@@ -54,7 +54,12 @@ jobs:
 
       - name: 🌱 Terraform Init
         working-directory: ./infra
-        run: terraform init
+        run: |
+          terraform init \
+          -input=false \
+          -backend-config="bucket=${{ secrets.BACKEND_BUCKET }}" \
+          -backend-config="key=terraform.tfstate" \
+          -backend-config="region=${{ env.AWS_REGION }}"
 
       - name: 🔎 Terraform Plan
         working-directory: ./infra
