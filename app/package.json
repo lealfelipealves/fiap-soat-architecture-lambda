@@ -1,0 +1,22 @@
+{
+  "name": "fiap-soat-architecture-lambda",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "zip:unix": "cd dist && zip -r ../lambda.zip .",
+    "zip:win": "powershell Compress-Archive -Path dist\\* -DestinationPath ..\\lambda.zip -Force",
+    "build:lambda:win": "npm run build && npm run zip:win",
+    "build:lambda:unix": "npm run build && npm run zip:unix"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.521.0",
+    "aws-lambda": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
+    "tsup": "^7.3.0",
+    "typescript": "^5.3.3"
+  }
+}
