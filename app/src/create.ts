@@ -14,7 +14,33 @@ const client = new CognitoIdentityProviderClient({});
 const USER_POOL_ID = process.env.USER_POOL_ID!;
 
 export const handler = async (event: any) => {
-  const cpf = event.cpf || "12345678901"; // ou pegue de event.body
+  let body: any = {};
+
+  try {
+    // Se vier string (API Gateway), parse
+    if (typeof event.body === "string") {
+      body = JSON.parse(event.body);
+    } 
+    // Se vier como objeto (invocação direta), usa direto
+    else if (typeof event.body === "object") {
+      body = event.body;
+    } 
+    // Se for nulo, usa o próprio event (caso do test manual)
+    else if (!event.body && (event as any).cpf) {
+      body = event;
+    }
+  } catch {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "JSON inválido no corpo da requisição" }),
+    };
+  }
+  
+  const cpf = body?.cpf;
+
+  if (!cpf) {
+    return { statusCode: 400, body: JSON.stringify({ error: "CPF é obrigatório" }) };
+  }
 
   try {
     const command = new AdminCreateUserCommand({
