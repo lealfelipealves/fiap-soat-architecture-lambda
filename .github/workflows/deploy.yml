@@ -36,7 +36,9 @@ jobs:
       - name: 🗜️ Zip da Lambda
         working-directory: ./app
         run: |
-          cd dist && zip -r ../../lambda.zip .
+          mv dist/index.cjs dist/index.js 
+          cd dist
+          zip -r ../../lambda.zip .
 
       - name: ⚙️ Setup Terraform
         uses: hashicorp/setup-terraform@v3
