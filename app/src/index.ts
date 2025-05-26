@@ -41,10 +41,10 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   }
 
   try {
-    const command = new AdminGetUserCommand({
-      Username: cpf,
-      UserPoolId: USER_POOL_ID,
-    });
+    // const command = new AdminGetUserCommand({
+    //   Username: cpf,
+    //   UserPoolId: USER_POOL_ID,
+    // });
 
     const command2 = new AdminInitiateAuthCommand({
       AuthFlow: "ADMIN_NO_SRP_AUTH",
@@ -56,18 +56,12 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       },
     })
 
-    const result = await client.send(command);
+    // const result = await client.send(command);
     const result2 = await client.send(command2);
 
     const response = {
       statusCode: 200,
-      body: JSON.stringify({
-        cpf,
-        status: result.UserStatus,
-        enabled: result.Enabled,
-        attributes: result.UserAttributes,
-        details: result2
-      }),
+      body: JSON.stringify(result2.AuthenticationResult),
     };
 
     console.log(response);
