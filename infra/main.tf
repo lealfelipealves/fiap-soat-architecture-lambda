@@ -93,12 +93,12 @@ resource "aws_iam_role_policy" "lambda_logs" {
 }
 
 resource "aws_lambda_function" "auth_lambda" {
-  filename         = "lambda.zip"
+  filename         = "../lambda.zip"
   function_name    = var.lambda_function_name
   role             = aws_iam_role.lambda_exec.arn
   handler          = var.lambda_function_handler
   runtime          = var.lambda_function_runtime
-  source_code_hash = filebase64sha256("lambda.zip")
+  source_code_hash = filebase64sha256("../lambda.zip")
 
   environment {
     variables = {
@@ -138,6 +138,10 @@ resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.cpf_api.id
   name        = "$default"
   auto_deploy = true
+}
+
+output "cognito_user_pool_id" {
+  value = aws_cognito_user_pool.cpf_pool.id
 }
 
 output "api_endpoint" {
