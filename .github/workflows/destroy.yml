@@ -23,7 +23,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: $AWS_REGION
+          aws-region: ${{ env.AWS_REGION }} 
 
       - name: Terraform Init
         working-directory: ./infra
@@ -31,4 +31,4 @@ jobs:
 
       - name: Terraform Destroy
         working-directory: ./infra
-        run: terraform destroy -auto-approve -var="prefix=$PREFIX"
+        run: terraform apply -auto-approve -var="prefix=${{ env.PREFIX }}"
