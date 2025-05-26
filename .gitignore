@@ -1,11 +1,1 @@
-.serverless
-.vscode
-node_modules
-
-# IDEs
-.vscode/
-.idea/
-
-# macOS e sistema operacional
-.DS_Store
-Thumbs.db
+lambda.zip
