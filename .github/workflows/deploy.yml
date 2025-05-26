@@ -56,7 +56,7 @@ jobs:
 
       - name: 🔎 Terraform Plan
         working-directory: ./infra
-        run: terraform plan
+        run: terraform plan -var="prefix=${{ env.PREFIX }}"
 
       - name: 🚀 Terraform Apply
         working-directory: ./infra
