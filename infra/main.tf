@@ -63,6 +63,7 @@ resource "aws_iam_role_policy" "lambda_cognito" {
           "cognito-idp:ListUsers",
           "cognito-idp:AdminCreateUser",
           "cognito-idp:AdminGetUser",
+          "cognito-idp:AdminSetUserPassword",
           "cognito-idp:AdminDeleteUser",
           "cognito-idp:AdminUpdateUserAttributes",
           "cognito-idp:AdminInitiateAuth"
