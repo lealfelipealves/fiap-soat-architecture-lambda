@@ -102,7 +102,7 @@ resource "aws_lambda_function" "auth_lambda" {
 
   environment {
     variables = {
-      COGNITO_POOL_ID = aws_cognito_user_pool.cpf_pool.id
+      USER_POOL_ID = aws_cognito_user_pool.cpf_pool.id
     }
   }
 }
