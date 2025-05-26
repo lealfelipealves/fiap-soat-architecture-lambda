@@ -37,6 +37,7 @@ jobs:
         working-directory: ./app
         run: |
           mv dist/index.cjs dist/index.js 
+          mv dist/create.cjs dist/create.js 
           cd dist
           zip -r ../../lambda.zip .
 
