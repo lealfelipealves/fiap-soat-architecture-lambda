@@ -102,7 +102,8 @@ resource "aws_lambda_function" "auth_lambda" {
 
   environment {
     variables = {
-      USER_POOL_ID = aws_cognito_user_pool.cpf_pool.id
+      USER_POOL_ID = aws_cognito_user_pool.cpf_pool.id,
+      CLIENT_ID = aws_cognito_user_pool_client.cpf_client.id
     }
   }
 }
@@ -146,4 +147,8 @@ output "cognito_user_pool_id" {
 
 output "api_endpoint" {
   value = aws_apigatewayv2_api.cpf_api.api_endpoint
+}
+
+output "cognito_client_id" {
+  value = aws_cognito_user_pool_client.cpf_client.id
 }
